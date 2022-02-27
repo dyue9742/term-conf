@@ -8,13 +8,13 @@ set pumheight=10
 set iskeyword+=-
 set shortmess+=c
 set completeopt=menu,menuone,noselect
+set noexpandtab nosmarttab
+set tabstop=4 softtabstop=4 shiftwidth=4
 set mouse=a
 set t_Co=256
 set cc=80
 set number relativenumber
 set splitbelow splitright
-set tabstop=4 softtabstop=0
-set shiftround shiftwidth=0
 set hidden
 set nowrap
 set nobackup
@@ -25,14 +25,11 @@ set updatetime=300
 set timeoutlen=500
 set formatoptions-=cro
 
-au! BufWritePre $MYVIMRC source %
-autocmd BufWritePre * :%s/\s\+$//e
-map <F7> gg=G<C-o><C-o>
 
 call plug#begin()
 " THEME
-Plug 'junegunn/seoul256.vim'
-Plug 'nlknguyen/papercolor-theme'
+Plug 'lifepillar/vim-gruvbox8'
+Plug 'sainnhe/everforest'
 
 " TOOLS
 Plug 'terryma/vim-multiple-cursors'
@@ -40,6 +37,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
 Plug 'raimondi/delimitmate'
 Plug 'bling/vim-bufferline'
+Plug 'Yggdroot/indentLine'
 Plug 'majutsushi/tagbar'
 Plug 'benmills/vimux'
 
@@ -59,6 +57,9 @@ Plug 'akinsho/bufferline.nvim'
 
 call plug#end()
 
+au! BufWritePre $MYVIMRC source %
+autocmd BufWritePre * :%s/\s\+$//e
+map <F7> gg=G<C-o><C-o>
 
 :lua << EOF
 
@@ -77,7 +78,7 @@ require'nvim-treesitter.configs'.setup{
 }
 
 require'lualine'.setup{
-	options = { theme = 'PaperColor' }
+		options = { theme = 'everforest' }
 }
 
 require'bufferline'.setup{}
@@ -112,6 +113,9 @@ cmp.setup({
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 require'lspconfig'.clangd.setup{
     capabilities = capabilities
+}
+require'lspconfig'.gopls.setup{
+		capabilities = capabilities
 }
 require'lspconfig'.hls.setup{
     capabilities = capabilities
@@ -153,16 +157,30 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-let g:PaperColor_Theme_Options = {
-	\ 'theme': {
-	\ 	'default': {
-	\  		'allow_bold': 1,
-	\ 		'allow_italic': 1
-	\  		}
-	\ 	}
-	\ }
+let g:indentLine_enabled = 1
 
-if $TERM_PROGRAM == "Apple_Terminal"
-	set background=light
-	colorscheme PaperColor
+" set background=dark
+" let g:gruvbox_bold = 1
+" let g:gruvbox_italics = 1
+" colorscheme gruvbox8
+
+" let g:seoul256_background = 234
+" colorscheme seoul256
+
+if has('termguicolors')
+	set termguicolors
 endif
+set background=dark
+let g:everforest_enable_italic = 1
+let g:everforest_background = 'hard'
+colorscheme everforest
+
+autocmd FileType ruby call Rb_Settings()
+function! Rb_Settings()
+	setlocal tabstop=2 softtabstop=0 shiftwidth=2
+endfunction
+
+autocmd FileType haskell call Hs_Settings()
+function! Hs_Settings()
+	setlocal tabstop=0 softtabstop=0 shiftwidth=0
+endfunction
