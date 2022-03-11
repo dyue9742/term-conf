@@ -1,5 +1,5 @@
 syntax enable
-filetype plugin indent on
+filetype plugin on
 set nocompatible
 set encoding=utf-8
 set fileencoding=utf-8
@@ -7,12 +7,14 @@ set cmdheight=2
 set pumheight=10
 set iskeyword+=-
 set shortmess+=c
+set shortmess-=F
 set completeopt=menu,menuone,noselect
+set autoindent smartindent
 set noexpandtab nosmarttab
-set tabstop=4 softtabstop=4 shiftwidth=4
+set tabstop=4 softtabstop=0 shiftwidth=0
 set mouse=a
-set t_Co=256
 set cc=80
+set t_Co=256
 set number relativenumber
 set splitbelow splitright
 set hidden
@@ -63,77 +65,71 @@ map <F7> gg=G<C-o><C-o>
 
 :lua << EOF
 
-require'telescope'.setup{
-    defaults = { file_ignore_patterns = {"node_modules"} }
-}
+require'telescope'.setup{ defaults = { file_ignore_patterns = {"node_modules"} } }
 
 require'nvim-treesitter.configs'.setup{
-    ensure_installed = "maintained",
-    highlight = {
-        enable = true
-    },
-    indent = {
-        enable = true
-    }
+	ensure_installed = "maintained",
+	highlight = {
+		enable = true
+	},
+	indent = { enable = true }
 }
 
-require'lualine'.setup{
-		options = { theme = 'everforest' }
-}
+require'lualine'.setup{ options = { theme = 'everforest' } }
 
 require'bufferline'.setup{}
 
 local cmp = require'cmp'
-
 cmp.setup({
-    snippet = {
-        expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body)
-        end
-    },
-    mapping = {
-        ['<C-q>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i','c'}),
-        ['<C-e>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i','c'}),
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i','c'}),
-        ['<C-y>'] = cmp.config.disable,
-        ['<C-a>'] = cmp.mapping({
-            i = cmp.mapping.abort(),
-            c = cmp.mapping.close(),
-        }),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
-    },
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'vsnip' }
-    }, {
-        { name = 'buffer' },
-    })
+	snippet = {
+		expand = function(args)
+		vim.fn["vsnip#anonymous"](args.body)
+	end
+	},
+	mapping = {
+		['<C-q>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i','c'}),
+		['<C-e>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i','c'}),
+		['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i','c'}),
+		['<C-y>'] = cmp.config.disable,
+		['<C-a>'] = cmp.mapping({
+			i = cmp.mapping.abort(),
+			c = cmp.mapping.close(),
+		}),
+		['<CR>'] = cmp.mapping.confirm({ select = true }),
+	},
+	sources = cmp.config.sources({
+		{ name = 'nvim_lsp' },
+		{ name = 'vsnip' }
+	}, {
+		{ name = 'buffer' },
+	})
 })
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-require'lspconfig'.clangd.setup{
-    capabilities = capabilities
+local nvim_lsp = require'lspconfig'
+nvim_lsp.clangd.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.gopls.setup{
-		capabilities = capabilities
+nvim_lsp.gopls.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.hls.setup{
-    capabilities = capabilities
+nvim_lsp.hls.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.pyright.setup{
-    capabilities = capabilities
+nvim_lsp.pyright.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.rust_analyzer.setup{
-    capabilities = capabilities
+nvim_lsp.rust_analyzer.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.solargraph.setup{
-    capabilities = capabilities
+nvim_lsp.solargraph.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.texlab.setup{
-    capabilities = capabilities
+nvim_lsp.texlab.setup{
+	capabilities = capabilities
 }
-require'lspconfig'.tsserver.setup{
-    capabilities = capabilities
+nvim_lsp.tsserver.setup{
+	capabilities = capabilities
 }
 
 EOF
@@ -174,13 +170,3 @@ set background=dark
 let g:everforest_enable_italic = 1
 let g:everforest_background = 'hard'
 colorscheme everforest
-
-autocmd FileType ruby call Rb_Settings()
-function! Rb_Settings()
-	setlocal tabstop=2 softtabstop=0 shiftwidth=2
-endfunction
-
-autocmd FileType haskell call Hs_Settings()
-function! Hs_Settings()
-	setlocal tabstop=0 softtabstop=0 shiftwidth=0
-endfunction
