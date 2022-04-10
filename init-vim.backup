@@ -9,9 +9,10 @@ set iskeyword+=-
 set shortmess+=c
 set shortmess-=F
 set completeopt=menu,menuone,noselect
-set autoindent smartindent
+set noautoindent nosmartindent
 set noexpandtab nosmarttab
-set tabstop=4 softtabstop=0 shiftwidth=0
+set indentexpr=
+set tabstop=2 softtabstop=0 shiftwidth=0
 set mouse=a
 set cc=80
 set t_Co=256
