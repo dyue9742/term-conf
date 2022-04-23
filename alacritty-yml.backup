@@ -1,25 +1,27 @@
 window:
+  dimensions:
+    columns: 120
+    lines: 50
   padding:
     x: 0
     y: 0
   dynamic_padding: true
-  decorations: none
-  startup_mode: SimpleFullscreen
+  decorations: full
 
 font:
   normal:
-    family: 'JetBrainsMono Nerd Font'
+    family: 'FiraCode Nerd Font'
     style: Regular
   bold:
-    family: 'JetBrainsMono Nerd Font'
+    family: 'FiraCode Nerd Font'
     style: Bold
   italic:
-    family: 'JetBrainsMono Nerd Font'
+    family: 'FiraCode Nerd Font'
     style: Italic
   bold_italic:
-    family: 'JetBrainsMono Nerd Font'
+    family: 'FiraCode Nerd Font'
     style: Bold Italic
-  size: 23.0
+  size: 17.0
 
 shell:
   program: /usr/local/bin/tmux

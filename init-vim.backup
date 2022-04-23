@@ -32,6 +32,7 @@ set formatoptions-=cro
 call plug#begin()
 " THEME
 Plug 'lifepillar/vim-gruvbox8'
+Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
 
 " TOOLS
@@ -154,20 +155,24 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-let g:indentLine_enabled = 1
+let g:indentLine_enabled = 0
+let delimitMate_quotes = "\" `"
 
-" set background=dark
-" let g:gruvbox_bold = 1
-" let g:gruvbox_italics = 1
-" colorscheme gruvbox8
 
-" let g:seoul256_background = 234
-" colorscheme seoul256
-
-if has('termguicolors')
-	set termguicolors
+if $TERM_PROGRAM == "iTerm.app"
+	let g:seoul256_background = 236
+	colorscheme seoul256
+else
+	set background=dark
+	let g:gruvbox_bold = 1
+	let g:gruvbox_italics = 1
+	colorscheme gruvbox8
 endif
-set background=dark
-let g:everforest_enable_italic = 1
-let g:everforest_background = 'hard'
-colorscheme everforest
+
+" if has('termguicolors')
+" "	set termguicolors
+" endif
+" set background=dark
+" let g:everforest_enable_italic = 1
+" let g:everforest_background = 'hard'
+" colorscheme everforest

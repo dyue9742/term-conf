@@ -39,11 +39,22 @@ set -g pane-active-border-style fg=green,bg=black
 setw -g window-style fg=colour240,bg=colour235
 setw -g window-active-style fg=white,bg=black
 
-set -g status-interval 1
-set -g status-left "#[fg=cyan,bright,bg=default]#H | #[default]"
-set -g status-left-length 60
-set -g status-right "#{prefix_highlight} #[fg=yellow,bright,bg=default] | #(whoami) | %a %d %b %R"
-set -g status-right-length 80
-
+set -g status-interval 2
+set -g status-left-length 50
+set -g status-left "#[fg=colour210,bright]««\
+										#[fg=colour166,bright] ƒ‹•› \
+										#[fg=colour210,bright]»»\
+										#[default]\
+									 "
+set -g status-right-length 100
+set -g status-right "#{prefix_highlight}\
+										 #[fg=colour210,bright]««\
+										 #[fg=yellow,bright]#(whoami)\
+										 #[fg=colour15,bright]@\
+										 #[fg=colour153,bright]#H\
+										 #[fg=colour15,bright]§\
+										 #[fg=colour86,bright]%a %d %b %R\
+										 #[fg=colour210,bright]»»\
+										"
 # Initialize
 run '~/.tmux/plugins/tpm/tpm'
