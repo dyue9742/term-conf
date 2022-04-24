@@ -31,9 +31,9 @@ set formatoptions-=cro
 
 call plug#begin()
 " THEME
-Plug 'lifepillar/vim-gruvbox8'
 Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
 
 " TOOLS
 Plug 'terryma/vim-multiple-cursors'
@@ -70,14 +70,14 @@ map <F7> gg=G<C-o><C-o>
 require'telescope'.setup{ defaults = { file_ignore_patterns = {"node_modules"} } }
 
 require'nvim-treesitter.configs'.setup{
-	ensure_installed = "maintained",
+	ensure_installed = "all",
 	highlight = {
 		enable = true
 	},
 	indent = { enable = true }
 }
 
-require'lualine'.setup{ options = { theme = 'everforest' } }
+require'lualine'.setup{ options = { theme = 'gruvbox-material' } }
 
 require'bufferline'.setup{}
 
@@ -159,20 +159,18 @@ let g:indentLine_enabled = 0
 let delimitMate_quotes = "\" `"
 
 
-if $TERM_PROGRAM == "iTerm.app"
-	let g:seoul256_background = 236
-	colorscheme seoul256
-else
-	set background=dark
-	let g:gruvbox_bold = 1
-	let g:gruvbox_italics = 1
-	colorscheme gruvbox8
-endif
+" let g:seoul256_background = 236
+" colorscheme seoul256
 
-" if has('termguicolors')
-" "	set termguicolors
-" endif
-" set background=dark
+if has('termguicolors')
+	set termguicolors
+endif
+set background=dark
+let g:gruvbox_material_enable_bold = 1
+let g:gruvbox_material_enable_italic = 1
+let g:gruvbox_material_background = 'soft'
+let g:gruvbox_material_better_performance = 1
+colorscheme gruvbox-material
 " let g:everforest_enable_italic = 1
 " let g:everforest_background = 'hard'
 " colorscheme everforest
