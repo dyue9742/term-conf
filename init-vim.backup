@@ -31,19 +31,18 @@ set formatoptions-=cro
 
 call plug#begin()
 " THEME
-Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
 Plug 'sainnhe/gruvbox-material'
 
 " TOOLS
-Plug 'terryma/vim-multiple-cursors'
-Plug 'easymotion/vim-easymotion'
 Plug 'airblade/vim-gitgutter'
-Plug 'raimondi/delimitmate'
 Plug 'bling/vim-bufferline'
-Plug 'Yggdroot/indentLine'
+Plug 'easymotion/vim-easymotion'
+Plug 'junegunn/fzf', {'do': { -> fzf#install() }}
 Plug 'majutsushi/tagbar'
-Plug 'benmills/vimux'
+Plug 'raimondi/delimitmate'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'Yggdroot/indentLine'
 
 Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/vim-vsnip'
@@ -158,9 +157,11 @@ let g:multi_cursor_quit_key            = '<Esc>'
 let g:indentLine_enabled = 0
 let delimitMate_quotes = "\" `"
 
+let g:fzf_layout = {'down': '40%'}
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+	\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-" let g:seoul256_background = 236
-" colorscheme seoul256
 
 if has('termguicolors')
 	set termguicolors
