@@ -12,9 +12,8 @@ set completeopt=menu,menuone,noselect
 set noautoindent nosmartindent
 set noexpandtab nosmarttab
 set indentexpr=
-set tabstop=2 softtabstop=0 shiftwidth=0
+set tabstop=4 softtabstop=0 shiftwidth=4
 set mouse=a
-set cc=80
 set t_Co=256
 set number relativenumber
 set splitbelow splitright
@@ -31,8 +30,8 @@ set formatoptions-=cro
 
 call plug#begin()
 " THEME
-Plug 'sainnhe/everforest'
-Plug 'sainnhe/gruvbox-material'
+Plug 'junegunn/seoul256.vim'
+Plug 'sainnhe/sonokai'
 
 " TOOLS
 Plug 'airblade/vim-gitgutter'
@@ -48,6 +47,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'neovim/nvim-lspconfig'
+Plug 'p00f/nvim-ts-rainbow'
 Plug 'nvim-lua/completion-nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -73,10 +73,15 @@ require'nvim-treesitter.configs'.setup{
 	highlight = {
 		enable = true
 	},
+	rainbow = {
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil,
+	},
 	indent = { enable = true }
 }
 
-require'lualine'.setup{ options = { theme = 'gruvbox-material' } }
+require'lualine'.setup{ options = { theme = "sonokai" } }
 
 require'bufferline'.setup{}
 
@@ -154,7 +159,10 @@ let g:multi_cursor_prev_key            = '<C-p>'
 let g:multi_cursor_skip_key            = '<C-x>'
 let g:multi_cursor_quit_key            = '<Esc>'
 
-let g:indentLine_enabled = 0
+let g:indentLine_char = '‡'
+let g:indentLine_conceallevel = 2
+let g:indentLine_enabled = 1
+
 let delimitMate_quotes = "\" `"
 
 let g:fzf_layout = {'down': '40%'}
@@ -163,15 +171,20 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 	\| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 
-if has('termguicolors')
-	set termguicolors
+let g:seoul256_background = 256
+colo seoul256
+
+if $TERM_PROGRAM == "iTerm.app"
+	let g:seoul256_background = 256
+	colo seoul256
+else
+	if has('termguicolors')
+		set termguicolors
+	endif
+	set background=dark
+	let g:sonokai_style = 'shusia'
+	let g:sonokai_enable_italic = 1
+	let g:sonokai_diagnostic_virtual_text = 1
+	let g:sonokai_diagnostic_text_highlight = 1
+	colorscheme sonokai
 endif
-set background=dark
-let g:gruvbox_material_enable_bold = 1
-let g:gruvbox_material_enable_italic = 1
-let g:gruvbox_material_background = 'soft'
-let g:gruvbox_material_better_performance = 1
-colorscheme gruvbox-material
-" let g:everforest_enable_italic = 1
-" let g:everforest_background = 'hard'
-" colorscheme everforest
