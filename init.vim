@@ -26,7 +26,6 @@ set shortmess+=c
 set shortmess-=F
 set pyxversion=3
 set laststatus=2
-set termguicolors
 set encoding=utf-8
 set fileencoding=utf-8
 set number relativenumber
@@ -44,14 +43,11 @@ Plug 'neovim/nvim-lspconfig'
 " INTERFACE
 Plug 'bling/vim-bufferline'
 Plug 'folke/trouble.nvim'
-Plug 'edkolev/tmuxline.vim'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'kyazdani42/nvim-tree.lua'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
 
 " TOOLS
 Plug 'easymotion/vim-easymotion'
@@ -67,7 +63,8 @@ Plug 'tpope/vim-vinegar'
 Plug 'yggdroot/indentline'
 
 " THEME
-Plug 'morhetz/gruvbox'
+Plug 'junegunn/seoul256.vim'
+Plug 'sainnhe/everforest'
 call plug#end()
 
 
@@ -218,7 +215,7 @@ require'trouble'.setup{
 }
 
 require'telescope'.setup{
-    defaults = { file_ignore_patterns = { "node_modules", "target" } }
+    defaults = { file_ignore_patterns = { "node_modules", "target", "android", "ios" } }
 }
 
 require'nvim-treesitter.configs'.setup{
@@ -232,30 +229,12 @@ require'nvim-treesitter.configs'.setup{
     indent = { enable = true }
 }
 
-require'nvim-tree'.setup{
-    disable_netrw = true,
-    hijack_netrw = true,
-    open_on_setup = true,
-    open_on_setup_file = true,
-    open_on_tab = true,
-    view = {
-        width = 40,
-    },
-    filters = {
-        custom = {
-            ".git",
-            "node_modules",
-            "target",
-        }
-    }
-}
 
 EOF
 
 " vimairline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline_theme = 'base16'
 " airline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
@@ -267,11 +246,6 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-
-" Nvim Tree
-nnoremap <leader>tt :NvimTreeToggle<CR>
-nnoremap <leader>tr :NvimTreeRefresh<CR>
-nnoremap <leader>tn :NvimTreeFindFile<CR>
 
 " Easymotion
 let g:EasyMotion_do_mapping  = 0
@@ -314,11 +288,22 @@ let g:indentLine_conceallevel  = 0
 let g:indentLine_char_list     = ['Æ']
 let g:indentLine_enabled       = 1
 
-" Gruvbox
-let g:gruvbox_bold = '1'
-let g:gruvbox_italic = '1'
-let g:gruvbox_contrast_dark = 'medium'
-colorscheme gruvbox
+if $LC_TERMINAL == 'iTerm2'
+    set termguicolors
+    let g:everforest_background = 'hard'
+    let g:everforest_better_performance = 1
+    let g:everforest_enable_italic = 1
+    let g:everforest_sign_column_background = 'grey'
+    let g:everforest_spell_foreground = 1
+    let g:everforest_ui_contrast = 'high'
+    let g:everforest_diagnostic_text_highlight = 1
+    let g:everforest_diagnostic_line_highlight = 1
+    colorscheme everforest
+else
+    let g:seoul256_background = 256
+    colo seoul256
+endif
+let g:airline_theme = 'everforest'
 
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd! FileType fzf
