@@ -31,7 +31,7 @@ set fileencoding=utf-8
 set number relativenumber
 set splitbelow splitright
 set rtp+=/usr/local/opt/fzf
-set tabstop=4 shiftround shiftwidth=4
+set tabstop=2 shiftround shiftwidth=2
 set completeopt=menu,menuone,noselect,preview
 set wildmenu wildmode=list:longest
 
@@ -39,6 +39,10 @@ set wildmenu wildmode=list:longest
 call plug#begin()
 " COMPLETION
 Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
 " INTERFACE
 Plug 'bling/vim-bufferline'
@@ -110,10 +114,39 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<space>f', vim.lsp.buf.formatting, bufopts)
 end
 
+
+local cmp = require'cmp'
+cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      end,
+    },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-Space>'] = cmp.mapping.complete(),
+      ['<C-e>'] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    }),
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+    }, {
+      { name = 'buffer' },
+    })
+})
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 local util = require'lspconfig.util'
 
 require'lspconfig'.clangd.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
     root_dir = util.root_pattern(
         "*.clangd",
@@ -127,6 +160,7 @@ require'lspconfig'.clangd.setup{
 
 require'lspconfig'.gopls.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "go", "gomod", "gotmpl" },
     root_dir = util.root_pattern("go.mod"),
     single_file_support = true
@@ -134,6 +168,7 @@ require'lspconfig'.gopls.setup{
 
 require'lspconfig'.hls.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "hs", "haskell", "lhaskell" },
     root_dir = util.root_pattern(
         "*.cabal",
@@ -150,6 +185,7 @@ local omnisharp_bin = "/Users/george/Git/repos/omnisharp-roslyn/artifacts/publis
 require'lspconfig'.omnisharp.setup{
     cmd = { omnisharp_bin, "--languageserver", "--hostPID", tostring(pid) },
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "cs", "vb" },
     root_dir = util.root_pattern("*.sln", "*.csproj"),
     single_file_support = true
@@ -157,18 +193,21 @@ require'lspconfig'.omnisharp.setup{
 
 require'lspconfig'.pyright.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "py" },
     single_file_support = true
 }
 
 require'lspconfig'.rust_analyzer.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "rust" },
     root_dir = util.root_pattern("Cargo.toml", "rust-project.json"),
 }
 
 require'lspconfig'.solargraph.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     filetypes = { "ruby" },
     init_options = { formatting = true },
     root_dir = util.root_pattern("Gemfile"),
@@ -178,6 +217,7 @@ require'lspconfig'.solargraph.setup{
 
 require'lspconfig'.sumneko_lua.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     workspace = {
         library = vim.api.nvim_get_runtime_file("", true),
     },
@@ -193,6 +233,7 @@ require'lspconfig'.sumneko_lua.setup{
 
 require'lspconfig'.tsserver.setup{
     on_attach = on_attach,
+    capabilities = capabilities,
     cmd = { "typescript-language-server", "--stdio" },
     filetypes = {
         "javascript",
@@ -210,12 +251,14 @@ require'lspconfig'.tsserver.setup{
 }
 
 
+
+
 require'trouble'.setup{
     use_diagnostic_signs = true
 }
 
 require'telescope'.setup{
-    defaults = { file_ignore_patterns = { "node_modules", "target", "android", "ios" } }
+    defaults = { file_ignore_patterns = { "node_modules", "target", "obj" } }
 }
 
 require'nvim-treesitter.configs'.setup{
