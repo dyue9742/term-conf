@@ -54,6 +54,7 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'vim-airline/vim-airline'
 
 " TOOLS
+Plug 'ap/vim-css-color'
 Plug 'easymotion/vim-easymotion'
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -347,6 +348,8 @@ else
     colo seoul256
 endif
 let g:airline_theme = 'everforest'
+
+nnoremap <leader>gp :silent %!prettier --stdin-filepath %<CR>
 
 autocmd BufWritePre * :%s/\s\+$//e
 autocmd! FileType fzf
