@@ -4,6 +4,7 @@ filetype indent plugin on
 let mapleader = "§"
 
 set nocompatible
+set background=dark
 set formatoptions-=cro
 set expandtab smarttab
 set incsearch hlsearch
@@ -26,6 +27,7 @@ set shortmess+=c
 set shortmess-=F
 set pyxversion=3
 set laststatus=2
+set termguicolors
 set encoding=utf-8
 set fileencoding=utf-8
 set number relativenumber
@@ -54,11 +56,11 @@ Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 Plug 'vim-airline/vim-airline'
 
 " TOOLS
-Plug 'ap/vim-css-color'
 Plug 'easymotion/vim-easymotion'
 Plug 'ervandew/supertab'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'mileszs/ack.vim'
+Plug 'norcalli/nvim-colorizer.lua'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'raimondi/delimitmate'
 Plug 'sirver/ultisnips'
@@ -68,8 +70,9 @@ Plug 'tpope/vim-vinegar'
 Plug 'yggdroot/indentline'
 
 " THEME
-Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
+Plug 'sainnhe/gruvbox-material'
+
 call plug#end()
 
 
@@ -273,12 +276,15 @@ require'nvim-treesitter.configs'.setup{
     indent = { enable = true }
 }
 
+require 'colorizer'.setup {
+  '*'
+}
 
 EOF
 
 " vimairline
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+let g:airline#extensions#tabline#formatter = 'unique_tail'
 " airline symbols
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
@@ -333,7 +339,6 @@ let g:indentLine_char_list     = ['Æ']
 let g:indentLine_enabled       = 1
 
 if $LC_TERMINAL == 'iTerm2'
-    set termguicolors
     let g:everforest_background = 'hard'
     let g:everforest_better_performance = 1
     let g:everforest_enable_italic = 1
@@ -343,11 +348,18 @@ if $LC_TERMINAL == 'iTerm2'
     let g:everforest_diagnostic_text_highlight = 1
     let g:everforest_diagnostic_line_highlight = 1
     colorscheme everforest
+    let g:airline_theme = 'everforest'
 else
-    let g:seoul256_background = 256
-    colo seoul256
+    let g:gruvbox_material_enable_bold = 1
+    let g:gruvbox_material_enable_italic = 1
+    let g:gruvbox_material_sign_column_background = 'grey'
+    let g:gruvbox_material_diagnostic_text_highlight = 1
+    let g:gruvbox_material_diagnostic_line_highlight = 1
+    let g:gruvbox_material_background = 'medium'
+    let g:gruvbox_material_better_performance = 1
+    colorscheme gruvbox-material
+    " let g:airline_theme = 'gruvbox-material'
 endif
-let g:airline_theme = 'everforest'
 
 nnoremap <leader>gp :silent %!prettier --stdin-filepath %<CR>
 

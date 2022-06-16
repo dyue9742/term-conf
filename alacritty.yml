@@ -1,0 +1,24 @@
+window:
+  dynamic_padding: true
+  padding:
+    x: 4
+    y: 0
+  opacity: 0.97
+  startup_mode: SimpleFullscreen
+
+font:
+  normal:
+    family: Monoid Nerd Font
+    style: Regular
+  bold:
+    family: Monoid Nerd Font
+    style: Bold
+  italic:
+    family: Monoid Nerd Font
+    style: Italic
+  bold_italic:
+    family: Monoid Nerd Font
+    style: Bold Italic
+  size: 24.0
+
+alt_send_esc: false
