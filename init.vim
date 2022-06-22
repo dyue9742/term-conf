@@ -198,7 +198,7 @@ require'lspconfig'.omnisharp.setup{
 require'lspconfig'.pyright.setup{
     on_attach = on_attach,
     capabilities = capabilities,
-    filetypes = { "py" },
+    filetypes = { "py", "python" },
     single_file_support = true
 }
 
