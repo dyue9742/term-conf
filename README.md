@@ -1,4 +1,4 @@
-# unix-neovim-config
+# unix/linux-config
 
 It looks like...
 
