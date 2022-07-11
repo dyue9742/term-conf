@@ -1,7 +1,7 @@
 syntax enable
 filetype indent plugin on
 
-let mapleader = "§"
+let mapleader = "|"
 
 set nocompatible
 set background=dark
@@ -11,8 +11,8 @@ set incsearch hlsearch
 set ignorecase smartcase
 set backspace=indent,eol,start
 set showcmd showmode showmatch
-set noswapfile nobackup nowritebackup
-set noautoindent nosmartindent
+set noswapfile
+set nobackup nowritebackup
 set noerrorbells
 set nowrap
 set hidden
@@ -184,6 +184,21 @@ require'lspconfig'.hls.setup{
     single_file_support = true
 }
 
+require'lspconfig'.jdtls.setup{
+    cmd = { "jdtls" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "java" },
+    root_dir = util.root_pattern(
+        "build.xml",
+        "pom.xml",
+        "settings.gradle",
+        "settings.gradle.kts",
+        "build.gradle"
+    ),
+    single_file_support = true
+}
+
 local pid = vim.fn.getpid()
 local omnisharp_bin = "/Users/george/Git/repos/omnisharp-roslyn/artifacts/publish/OmniSharp.Stdio.Driver/osx-x64/net6.0/OmniSharp"
 require'lspconfig'.omnisharp.setup{
@@ -192,6 +207,14 @@ require'lspconfig'.omnisharp.setup{
     capabilities = capabilities,
     filetypes = { "cs", "vb" },
     root_dir = util.root_pattern("*.sln", "*.csproj"),
+    single_file_support = true
+}
+
+require'lspconfig'.perlls.setup{
+    cmd = { "perl", "-MPerl::LanguageServer", "-e", "Perl::LanguageServer::run", "--", "--port 13603", "--nostdio 0" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    filetypes = { "perl" },
     single_file_support = true
 }
 
@@ -258,6 +281,9 @@ require'lspconfig'.tsserver.setup{
 
 
 require'trouble'.setup{
+    height = 5,
+    auto_open = true,
+    auto_close = true,
     use_diagnostic_signs = true
 }
 
