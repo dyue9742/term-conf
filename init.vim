@@ -1,19 +1,19 @@
 syntax enable
 filetype indent plugin on
 
-let mapleader = "|"
+let mapleader = "."
 
 set nocompatible
-set background=dark
 set formatoptions-=cro
 set expandtab smarttab
 set incsearch hlsearch
 set ignorecase smartcase
 set backspace=indent,eol,start
 set showcmd showmode showmatch
-set noswapfile
-set nobackup nowritebackup
+set nowritebackup
 set noerrorbells
+set noswapfile
+set nobackup
 set nowrap
 set hidden
 set mouse=a
@@ -70,13 +70,13 @@ Plug 'tpope/vim-vinegar'
 Plug 'yggdroot/indentline'
 
 " THEME
+Plug 'junegunn/seoul256.vim'
 Plug 'sainnhe/everforest'
-Plug 'sainnhe/gruvbox-material'
 
 call plug#end()
 
 
-lua << EOF
+:lua << EOF
 
 local signs = { Error = "🙈", Warn = "🙊", Hint = "🎐", Info ="💮" }
 for type, icon in pairs(signs) do
@@ -160,6 +160,14 @@ require'lspconfig'.clangd.setup{
         "configure.ac"
     ),
     single_file_support = true
+}
+
+require'lspconfig'.elixirls.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = { "elixir-ls" },
+  filetypes = { "elixir", "eelixir", "heex" },
+  root_dir = util.root_pattern("mix.exs")
 }
 
 require'lspconfig'.gopls.setup{
@@ -278,8 +286,6 @@ require'lspconfig'.tsserver.setup{
 }
 
 
-
-
 require'trouble'.setup{
     height = 5,
     auto_open = true,
@@ -302,11 +308,12 @@ require'nvim-treesitter.configs'.setup{
     indent = { enable = true }
 }
 
-require 'colorizer'.setup {
+require'colorizer'.setup{
   '*'
 }
 
 EOF
+
 
 " vimairline
 let g:airline#extensions#tabline#enabled = 1
@@ -364,27 +371,22 @@ let g:indentLine_conceallevel  = 0
 let g:indentLine_char_list     = ['Æ']
 let g:indentLine_enabled       = 1
 
-if $LC_TERMINAL == 'iTerm2'
-    let g:everforest_background = 'hard'
-    let g:everforest_better_performance = 1
-    let g:everforest_enable_italic = 1
-    let g:everforest_sign_column_background = 'grey'
-    let g:everforest_spell_foreground = 1
-    let g:everforest_ui_contrast = 'high'
-    let g:everforest_diagnostic_text_highlight = 1
-    let g:everforest_diagnostic_line_highlight = 1
-    colorscheme everforest
-    let g:airline_theme = 'everforest'
+if $TERM_PROGRAM == 'Apple_Terminal'
+  set notermguicolors
+  let g:seoul256_background = 256
+  colo seoul256
 else
-    let g:gruvbox_material_enable_bold = 1
-    let g:gruvbox_material_enable_italic = 1
-    let g:gruvbox_material_sign_column_background = 'grey'
-    let g:gruvbox_material_diagnostic_text_highlight = 1
-    let g:gruvbox_material_diagnostic_line_highlight = 1
-    let g:gruvbox_material_background = 'medium'
-    let g:gruvbox_material_better_performance = 1
-    colorscheme gruvbox-material
-    " let g:airline_theme = 'gruvbox-material'
+  set background=dark
+  let g:everforest_background = 'hard'
+  let g:everforest_better_performance = 1
+  let g:everforest_enable_italic = 1
+  let g:everforest_sign_column_background = 'grey'
+  let g:everforest_spell_foreground = 1
+  let g:everforest_ui_contrast = 'high'
+  let g:everforest_diagnostic_text_highlight = 1
+  let g:everforest_diagnostic_line_highlight = 1
+  colorscheme everforest
+  let g:airline_theme = 'everforest'
 endif
 
 nnoremap <leader>gp :silent %!prettier --stdin-filepath %<CR>
